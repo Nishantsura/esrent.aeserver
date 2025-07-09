@@ -11,7 +11,7 @@
 
 2. **FRONTEND_URL**
    - Your frontend application URL for CORS configuration
-   - Example: `https://your-frontend-app.vercel.app`
+   - Set to: `https://e-srent-yphpzl7d9-esrentals-projects.vercel.app`
 
 3. **NODE_ENV** (automatically set by Railway)
    - Will be set to `production` automatically
@@ -32,7 +32,7 @@
 For local development, create a `.env` file with:
 ```
 FIREBASE_SERVICE_ACCOUNT_JSON=<your-firebase-json>
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=https://e-srent-yphpzl7d9-esrentals-projects.vercel.app
 NODE_ENV=development
 PORT=5000
 ``` 
