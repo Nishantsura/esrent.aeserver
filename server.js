@@ -67,6 +67,21 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'AutoLuxe Car Rental API is running!',
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      '/api/users',
+      '/api/cars', 
+      '/api/brands',
+      '/api/categories'
+    ]
+  });
+});
+
 // Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/cars', require('./routes/cars'));
