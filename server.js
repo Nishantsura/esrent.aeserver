@@ -39,7 +39,7 @@ const corsOptions = {
   origin: function(origin, callback) {
     const allowedOrigins = [
       process.env.FRONTEND_URL,
-      'https://e-srent-yphpzl7d9-esrentals-projects.vercel.app',
+      'https://e-srent-ae.vercel.app',
       /^http:\/\/localhost:\d+$/, // allow any localhost port
       /^https:\/\/.*\.vercel\.app$/ // allow any vercel deployment
     ].filter(Boolean);

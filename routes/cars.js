@@ -28,8 +28,8 @@ const requireAdmin = async (req, res, next) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     console.log('Decoded token:', decodedToken); // Debug log
     
-    if (!decodedToken.email?.endsWith('@autoluxe.com')) {
-      console.log('Not an autoluxe email:', decodedToken.email); // Debug log
+    if (!decodedToken.email?.endsWith('@esrent.ae')) {
+      console.log('Not an esrent email:', decodedToken.email); // Debug log
       return res.status(403).json({ error: 'Not an authorized email domain' });
     }
 
