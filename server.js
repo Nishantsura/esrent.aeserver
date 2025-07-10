@@ -8,16 +8,31 @@ const PORT = process.env.PORT || 5000;
 
 // Initialize Firebase Admin SDK
 let serviceAccount;
-if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-  serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-} else {
-  // Fallback for local development
-  serviceAccount = require('./serviceAccountKey.json');
+try {
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    console.log('Firebase initialized successfully');
+  } else {
+    // Fallback for local development
+    try {
+      serviceAccount = require('./serviceAccountKey.json');
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+      console.log('Firebase initialized with local service account');
+    } catch (error) {
+      console.error('No Firebase credentials found. Running without Firebase:', error.message);
+      // Initialize Firebase with a placeholder - this will allow the server to start
+      // but Firebase-dependent routes will need to handle this gracefully
+    }
+  }
+} catch (error) {
+  console.error('Firebase initialization error:', error.message);
+  // Server will continue to run, but Firebase features won't work
 }
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
 
 // CORS configuration
 const corsOptions = {
@@ -69,10 +84,22 @@ app.use((req, res, next) => {
 
 // Health check route
 app.get('/', (req, res) => {
+  // Check if Firebase is initialized
+  let firebaseStatus = 'not_initialized';
+  try {
+    admin.app();
+    firebaseStatus = 'initialized';
+  } catch (error) {
+    firebaseStatus = 'error: ' + error.message;
+  }
+
   res.json({
     status: 'success',
     message: 'AutoLuxe Car Rental API is running!',
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    firebase: firebaseStatus,
+    hasFirebaseEnvVar: !!process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
     endpoints: [
       '/api/users',
       '/api/cars', 
